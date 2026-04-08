@@ -11,14 +11,14 @@ public class Giocatore {
     }
 
     public int getCfu() {
-        return cfu;
+        return this.cfu;
     }
-
+    
     public void setCfu(int cfu) {
         this.cfu = cfu;
     }
-
+    
     public Borsa getBorsa() {
-        return borsa;
+        return this.borsa;
     }
 }

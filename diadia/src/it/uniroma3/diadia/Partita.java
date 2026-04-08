@@ -1,47 +1,62 @@
 package it.uniroma3.diadia;
 
-import it.uniroma3.diadia.ambienti.*;
-import it.uniroma3.diadia.giocatore.*;
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.Stanza;
+import it.uniroma3.diadia.giocatore.Giocatore;
+import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class Partita {
 
-    private Labirinto labirinto;
-    private Giocatore giocatore;
-    private boolean finita;
+    static final private int CFU_INIZIALI = 20;
+
     private Stanza stanzaCorrente;
-
-    public Partita() {
+    private Stanza stanzaVincente;
+    private boolean finita;
+    private Giocatore giocatore;
+    private Labirinto labirinto;
+    
+    public Partita(){
         this.labirinto = new Labirinto();
-        this.giocatore = new Giocatore();
-        this.finita = false;
         this.stanzaCorrente = labirinto.getStanzaIniziale();
-    }
-
-    public Stanza getStanzaCorrente() {
-        return stanzaCorrente;
-    }
-
-    public void setStanzaCorrente(Stanza s) {
-        this.stanzaCorrente = s;
+        this.stanzaVincente = labirinto.getStanzaFinale();
+        this.finita = false;
+        this.giocatore = new Giocatore();
     }
 
     public Stanza getStanzaVincente() {
-        return labirinto.getStanzaFinale();
+        return stanzaVincente;
     }
 
-    public Giocatore getGiocatore() {
-        return giocatore;
+    public void setStanzaCorrente(Stanza stanzaCorrente) {
+        this.stanzaCorrente = stanzaCorrente;
+    }
+
+    public Stanza getStanzaCorrente() {
+        return this.stanzaCorrente;
+    }
+    
+    public boolean vinta() {
+        return this.getStanzaCorrente() == this.getStanzaVincente();
+    }
+
+    public boolean isFinita() {
+        return finita || vinta() || (this.giocatore.getCfu() == 0);
+    }
+
+    public void setFinita() {
+        this.finita = true;
     }
 
     public int getCfu() {
-        return giocatore.getCfu();
+        return this.giocatore.getCfu();
     }
 
     public void setCfu(int cfu) {
-        giocatore.setCfu(cfu);
-    }
-
-    public boolean vinta() {
-        return stanzaCorrente == getStanzaVincente();
+        this.giocatore.setCfu(cfu);  
+ 
+    }  
+    
+    public Giocatore getGiocatore() {
+        return this.giocatore;
     }
 }
