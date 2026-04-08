@@ -1,68 +1,78 @@
 package it.uniroma3.diadia.giocatore;
+
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class Borsa {
 
+    public final static int DEFAULT_PESO_MAX_BORSA = 10;
     private Attrezzo[] attrezzi;
     private int numeroAttrezzi;
+    private int pesoMax;
 
     public Borsa() {
+        this(DEFAULT_PESO_MAX_BORSA);
+    }
+
+    public Borsa(int pesoMax) {
+        this.pesoMax = pesoMax;
         this.attrezzi = new Attrezzo[10];
         this.numeroAttrezzi = 0;
+    }
+
+    public boolean addAttrezzo(Attrezzo attrezzo) {
+        if (this.getPeso() + attrezzo.getPeso() > this.getPesoMax())
+            return false;
+        if (this.numeroAttrezzi == 10)
+            return false;
+
+        this.attrezzi[this.numeroAttrezzi++] = attrezzo;
+        return true;
+    }
+
+    public int getPesoMax() {
+        return pesoMax;
+    }
+
+    public Attrezzo getAttrezzo(String nomeAttrezzo) {
+        for (int i = 0; i < this.numeroAttrezzi; i++)
+            if (this.attrezzi[i].getNome().equals(nomeAttrezzo))
+                return attrezzi[i];
+        return null;
+    }
+
+    public int getPeso() {
+        int peso = 0;
+        for (int i = 0; i < this.numeroAttrezzi; i++)
+            peso += this.attrezzi[i].getPeso();
+        return peso;
     }
 
     public boolean isEmpty() {
         return this.numeroAttrezzi == 0;
     }
-
-    public void addAttrezzo(Attrezzo attrezzo) {
-        this.attrezzi[numeroAttrezzi] = attrezzo;
-        this.numeroAttrezzi++;
-    }
-
-    public boolean hasAttrezzo(String nome) {
-        for (Attrezzo attrezzo : this.attrezzi) {
-            if (attrezzo != null && attrezzo.getNome().equals(nome)) {
-                return true;
-            }
-        }
-        return false;
-    }
     
-    public boolean removeAttrezzo(Attrezzo attrezzo) {
+    public Attrezzo removeAttrezzo(String nomeAttrezzo) {
         for (int i = 0; i < this.numeroAttrezzi; i++) {
-            if (this.attrezzi[i].equals(attrezzo)) {
+            if (this.attrezzi[i].getNome().equals(nomeAttrezzo)) {
 
-                // sposta a sinistra
+                Attrezzo rimosso = this.attrezzi[i];
+
+                // shift
                 for (int j = i; j < this.numeroAttrezzi - 1; j++) {
                     this.attrezzi[j] = this.attrezzi[j + 1];
                 }
 
-                this.attrezzi[numeroAttrezzi - 1] = null;
+                this.attrezzi[this.numeroAttrezzi - 1] = null;
                 this.numeroAttrezzi--;
 
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    public Attrezzo getAttrezzo(String nomeAttrezzo) {
-        for (Attrezzo attrezzo : this.attrezzi) {
-            if (attrezzo != null && attrezzo.getNome().equals(nomeAttrezzo)) {
-                return attrezzo;
+                return rimosso;
             }
         }
         return null;
     }
 
-    public boolean removeAttrezzo(String nomeAttrezzo) {
-        for (int i = 0; i < this.attrezzi.length; i++) {
-            if (this.attrezzi[i] != null && this.attrezzi[i].getNome().equals(nomeAttrezzo)) {
-                this.attrezzi[i] = null;
-                return true;
-            }
-        }
-        return false;
+    public boolean hasAttrezzo(String nomeAttrezzo) {
+        return this.getAttrezzo(nomeAttrezzo) != null;
     }
+
 }
