@@ -48,17 +48,21 @@ public class Stanza {
      */
     public void impostaStanzaAdiacente(String direzione, Stanza stanza) {
         boolean aggiornato = false;
-    	for(int i=0; i<this.direzioni.length; i++)
-        	if (direzione.equals(this.direzioni[i])) {
-        		this.stanzeAdiacenti[i] = stanza;
-        		aggiornato = true;
-        	}
-    	if (!aggiornato)
-    		if (this.numeroStanzeAdiacenti < NUMERO_MASSIMO_DIREZIONI) {
-    			this.direzioni[numeroStanzeAdiacenti] = direzione;
-    			this.stanzeAdiacenti[numeroStanzeAdiacenti] = stanza;
-    		    this.numeroStanzeAdiacenti++;
-    		}
+
+        for(int i=0; i<this.numeroStanzeAdiacenti; i++) {
+            if (direzione.equals(this.direzioni[i])) {
+                this.stanzeAdiacenti[i] = stanza;
+                aggiornato = true;
+            }
+        }
+
+        if (!aggiornato) {
+            if (this.numeroStanzeAdiacenti < NUMERO_MASSIMO_DIREZIONI) {
+                this.direzioni[numeroStanzeAdiacenti] = direzione;
+                this.stanzeAdiacenti[numeroStanzeAdiacenti] = stanza;
+                this.numeroStanzeAdiacenti++;
+            }
+        }
     }
 
     /**
@@ -118,6 +122,7 @@ public class Stanza {
 	* stampadone la descrizione, le uscite e gli eventuali attrezzi contenuti
 	* @return la rappresentazione stringa
 	*/
+    @Override
     public String toString() {
     	StringBuilder risultato = new StringBuilder();
     	risultato.append(this.nome);
@@ -127,12 +132,12 @@ public class Stanza {
     			risultato.append(" " + direzione);
     	risultato.append("\nAttrezzi nella stanza: ");
     	for (Attrezzo attrezzo : this.attrezzi) {
-    	    if (attrezzo != null)
-    	        risultato.append(attrezzo.toString()+" ");
+    		if(attrezzo!=null) {
+    		risultato.append(attrezzo.toString()+" ");
     	}
+    		}
     	return risultato.toString();
     }
-
     /**
 	* Controlla se un attrezzo esiste nella stanza (uguaglianza sul nome).
 	* @return true se l'attrezzo esiste nella stanza, false altrimenti.
@@ -141,8 +146,8 @@ public class Stanza {
 		boolean trovato;
 		trovato = false;
 		for (Attrezzo attrezzo : this.attrezzi) {
-		    if (attrezzo != null && attrezzo.getNome().equals(nomeAttrezzo))
-		        trovato = true;
+			if (attrezzo.getNome().equals(nomeAttrezzo))
+				trovato = true;
 		}
 		return trovato;
 	}
@@ -157,8 +162,8 @@ public class Stanza {
 		Attrezzo attrezzoCercato;
 		attrezzoCercato = null;
 		for (Attrezzo attrezzo : this.attrezzi) {
-		    if (attrezzo != null && attrezzo.getNome().equals(nomeAttrezzo))
-		        attrezzoCercato = attrezzo;
+			if (attrezzo.getNome().equals(nomeAttrezzo))
+				attrezzoCercato = attrezzo;
 		}
 		return attrezzoCercato;	
 	}
@@ -172,12 +177,12 @@ public class Stanza {
 	    for (int i = 0; i < this.numeroAttrezzi; i++) {
 	        if (this.attrezzi[i].equals(attrezzo)) {
 
-	            // sposta a sinistra gli elementi
+	            
 	            for (int j = i; j < this.numeroAttrezzi - 1; j++) {
 	                this.attrezzi[j] = this.attrezzi[j + 1];
 	            }
 
-	            this.attrezzi[numeroAttrezzi - 1] = null;
+	            this.attrezzi[this.numeroAttrezzi - 1] = null;
 	            this.numeroAttrezzi--;
 
 	            return true;
